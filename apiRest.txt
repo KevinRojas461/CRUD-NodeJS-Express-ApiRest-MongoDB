@@ -1,0 +1,90 @@
+Body = datos o info que viaja
+
+rest: 
+
+es una arquitectura de software
+-- y se a utilizado mas que todo para construir apis de hay viene el "API REST"
+
+--todas las "arquitecturas" de software responden a la idea de poder crear 
+algo -- "que pueda sostenerce en el tiempo de la forma posible y 
+simplificar el desarrollo"
+
+-------resources (recursos):
+
+que puede ser un usuario imagen listas etc
+--"cada recurso se va a identificar con una URL"
+
+-------verbos http get post put...
+
+"para definir las operaciones que se pueden realizar con los recursos" 
+los verbos normalmente representan las acciones basicas de un CRUD
+
+
+-------representaciones de los recursos 
+(los recursos se pueden representar en diferentes formatos)
+json, xml, html etc el cliente deberia poder decidir la representacion del recurso
+
+
+
+--------stateless
+el servidor no puede hacer nada que guarde info para poder saber responder
+que tiene que decirle al cliente 
+ejp no puede guardar cuantas llamadas se han hecho 
+si tiene que paginar (las tiendas online muestran la imagen 
+y el precio del producto en la página de inicio.)
+"esa infromacionde lo que tiene que hacer simpre tiene que ir en la URL"
+o ne la peticion para que el servidor ya sepa lo que tiene que hacer
+--El cliente debe enviar toda la informacion necesaria para procesar la peticion
+
+
+-------interfaz uniforma 
+-------separacion de conceptos
+
+api traer info en una url
+
+
+
+
+"sql": "SELECT * FROM users",
+"title": "The Godfather",
+POST http://localhost:1234/movies
+
+se le puede pasar a la api el "sql" un atributo que no es de movies
+y funciona perfectamnete pero simplemente lo ignora ha creado 
+yo no necesito esto (sql) lo ignoro
+
+
+
+
+diferencia entre post put y patch
+
+Idempotencia: hacer una accion varias veces y aun asi conseguir el mismo resultado
+que se obtendria al hacerlo una vez
+ejp una funcion que sume 2 + 2 simpre se va a obtener el mismo resultado
+
+
+POST: crear un nuevo elemento/recurso en el servidor
+(/movies)
+no es Idempotente pq crea simpre un nuevo recurso
+
+
+PUT: Actualizar totalmente un elemento/recurso ya existente o crearlo 
+si no existe
+(/movies/123-456-789) la direccion con la id 
+Si es Idempotente pq el id ya existe
+Crear un id con put 
+---Put es decir hay que enviarle todos los datos para Actualizar
+si yo quiero cambiar solo el nom igual tengo que pasarle el apellido
+y entonces el nombre lo cambia por el que le psae y el apellido tambien
+lo Actualiza pero sigue sinedo el mismo que habia antes
+
+
+PATCH: Actualizar parcialmente un elemento/recurso. 
+(/movies/123-456-789) la direccion con la id  
+--es decir le puedo envar solo lo que yo quiero Actualizar y solo me cambia esto
+no es necesari pasarle todos los atributos del objeto para que actualice
+
+si y no si se usa updateAt no es Idempotente
+updateAt es un campo de la bd que muetra la fecha de cuando se Actualizo algo
+del recurso
+updateAt cada vez que Actualises el recurso el updateAt cambia

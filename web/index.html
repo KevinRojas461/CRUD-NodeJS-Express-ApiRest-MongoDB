@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Probar API Rest</title>
+  <style>
+    article {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    img {
+      height: auto;
+      width: 320px;
+      max-width: 100%;
+    }
+  </style>
+  <!-- module pq lo puedo poner arriba --> 
+  <script type="module">
+    // Hace una solicitud HTTP para obtener datos de una API.
+    // fetch se utiliza para hacer solicitudes HTTP. En este caso,
+    // se está haciendo una solicitud GET a la URL http://localhost:1234/movies
+
+    // http://localhost:1234/movies es el endpoint desde donde se espera obtener
+    // la lista de películas en formato JSON.
+    fetch('http://localhost:1234/movies')
+      // Convierte la respuesta en JSON. (el movies.json)
+      // devuelve una promesa que se resuelve con un objeto Response
+      // representando "la respuesta a la solicitud." y Convierte la respuesta en JSON.
+      // quiero ver mis peliculas y quiero usar la api
+      .then(res => res.json())
+      // Procesa los datos de las películas.
+      // La promesa devuelta por res.json() se resuelve con un array de objetos
+      // movies (movies.json), donde cada objeto representa una película.
+      .then(movies => {
+        // Crea una cadena HTML para cada película.
+        // Itera sobre cada película en el array movies y devuelve un "nuevo array" donde
+        // cada película se convierte en una cadena HTML.
+        // el nuevo array se llama html
+        const html = movies.map(movie => {
+          // Cada película se representa con un elemento <article> que incluye su título,
+          // imagen, año y un botón para eliminar.
+          return `
+            <article data-id="${movie.id}">
+              <h2>${movie.title}</h2>
+              <img src="${movie.poster}" alt="${movie.title}">
+              <p>${movie.year}</p>
+
+              <button>Eliminar</button>
+            </article>
+          `
+        }).join('')
+        // .join(''): Combina todos los elementos
+        // del array resultante en una sola cadena sin ningún separador.
+        // ---Combina las cadenas HTML (cada peli) en una sola cadena html.
+
+        document.querySelector('main').innerHTML = html
+        // selecciona el primer elemento <main> del documento y establece su contenido
+        // HTML en la cadena html generada previamente. Esto actualizará el contenido
+        // de la página con los artículos de las películas.
+        // ---Inserta el HTML en el documento.
+
+        // Añade un listener para manejar los clics en botones.
+        // se activa cuando ocurre un evento de clic 
+        // El evento se pasa como argumento 'e' a la función de callback.
+        document.addEventListener('click', e => {
+          // Comprueba si el elemento clicado es un botón.
+          // Aquí se verifica si el elemento que fue clicado (e.target) es un botón. 
+          // La función matches('button') devuelve true si e.target coincide 
+          // con el selector CSS 'button'. Esto asegura que el código dentro del
+          // bloque if solo se ejecutará si se hace clic en un botón.
+          if (e.target.matches('button')) {
+            // Encuentra el elemento <article> que contiene el botón clicado.
+            // La función closest('article') encuentra el ancestro más cercano
+            // del elemento clicado (e.target) que "coincide" con el selector
+            // "article". "Esto selecciona" el elemento <article> que contiene
+            // el botón clicado.
+            const article = e.target.closest('article')
+            // Obtiene el ID de la película desde el atributo data-id del <article>.
+            // Aquí se obtiene el valor del atributo data-id del elemento <article>.
+            // Este valor es el ID de la película, que se necesita para identificar
+            // cuál película debe ser eliminada.
+            const id = article.dataset.id
+            // Envía una solicitud DELETE al servidor para eliminar la película correspondiente.
+            // realiza una solicitud HTTP DELETE al servidor para eliminar la película
+            // con el ID obtenido. La URL es http://localhost:1234/movies/${id}, donde
+            // ${id} es el ID de la película. El objeto de configuración de la solicitud
+            // incluye el método DELETE.
+            fetch(`http://localhost:1234/movies/${id}`, {
+              method: 'DELETE'
+            })
+            // Después de que se completa la solicitud DELETE, la promesa devuelta por
+            // fetch se resuelve con una respuesta res.
+              .then(res => {
+                // res.ok: Esta propiedad es true si la respuesta HTTP indica "éxito" 
+                // (estado 200-299).
+                // Cuando tengamos el ok entonces lo envia
+                if (res.ok) {
+                  // Si la solicitud DELETE tiene éxito, elimina el <article> del DOM.
+                  // article.remove(): Si la respuesta indica que la eliminación fue exitosa
+                  // (res.ok es true), el elemento <article> que contiene la película es
+                  // eliminado del DOM.
+                  article.remove()
+                }
+              })
+          }
+        })
+      })
+  </script>
+</head>
+<body>
+  <main></main>
+</body>
+</html>

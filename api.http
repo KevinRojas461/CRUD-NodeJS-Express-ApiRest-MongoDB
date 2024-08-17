@@ -1,0 +1,47 @@
+### Recuperar todas las peliculas
+GET http://localhost:1234/movies
+
+
+### Recuperar una pelicula por id
+GET http://localhost:1234/movies/c8a7d63f-3b04-44d3-9d95-8782fd7dcfaf
+
+
+### fil todas pelis Por un genero http://localhost:1234/movies/genre/1 o query params:
+GET http://localhost:1234/movies?genre=action
+
+### Crear una pelicula con POST "year": "pepote" "title": 1 
+POST http://localhost:1234/movies
+Content-Type: application/json
+
+{
+  // "sql": "SELECT * FROM users",
+  // sql lo ignora porque sql no se esta validando
+  "sql": "SELECT * FROM users",
+  "title": "The Godfather",
+  "year": 1975,
+  "director": "Francis Ford Coppola",
+  "duration": 175,
+  "poster": "https://img.fruugo.com/product/4/49/14441494_max.jpg",
+  "genre": [
+    "Crime",
+    "Drama"
+  ]
+}
+### Borrar una pelicula
+DELETE http://localhost:1234/movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
+
+### Actualizar una peli solo una parte PATCH
+PATCH http://localhost:1234/movies/c8a7d63f-3b04-44d3-9d95-8782fd7dcfaf
+Content-Type: application/json
+
+{
+  // (no se pude cambiar la id pq la id no se esta validando)
+  // no puedo cambiar el id pq no tiene permiso para cambiar el id
+  // porque la id no se esta validando
+  // como no se valida aunque se le pase la id la ignora
+
+  // todas la propiedades del schema sean opcionales pero si estan las validas
+  // si no estan no pasa nada ademas si no esta de ninguna forma 
+  // la propiedad (atributo) en el esquema la ignoras
+  "year": 2020
+}
